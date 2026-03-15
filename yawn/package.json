@@ -26,7 +26,8 @@
   },
   "scripts": {
     "prebuild": "rm -rf dist",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "prepack": "npm run build"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^16.0.3",
