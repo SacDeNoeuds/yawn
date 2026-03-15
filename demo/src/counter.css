@@ -1,0 +1,17 @@
+@scope (.counter) {
+    :scope {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5em;
+        font-size: 1.5em;
+        font-variant-numeric: tabular-nums;
+    }
+    button {
+        width: 2em;
+        height: 2em;
+        border: none;
+        border-radius: 0.25em;
+        background-color: #eee;
+        cursor: pointer;
+    }
+}

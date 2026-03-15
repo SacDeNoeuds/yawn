@@ -1,6 +1,7 @@
 import { renderChildren } from "../create-node";
 import type { Children } from "./jsx-runtime";
 import { onConnected } from "../lifecycle";
+import { createElement } from "../create-element";
 
 export const Fragment = (props: { children?: Children }): Node => {
   const mount = (element: HTMLElement) => {
@@ -11,5 +12,5 @@ export const Fragment = (props: { children?: Children }): Node => {
       renderChildren(parent, props.children);
     });
   };
-  return <span ref={mount} />;
+  return createElement('span')({ ref: mount })();
 };

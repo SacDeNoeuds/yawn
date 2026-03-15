@@ -1,4 +1,5 @@
-import { createState } from "yawn";
+import { createState } from "@sacdenoeuds/yawn";
+import './counter.css';
 
 interface Props {
   initialCount?: number;

@@ -344,12 +344,15 @@ export type AriaRole =
 
 declare global {
   namespace JSX {
+    // @ts-expect-error FIXME: fix it
     interface HTMLAttributes extends HTMLAttributes {
       test?: "toto";
     }
+    interface CustomAttributes {}
   }
 }
 
+// @ts-expect-error FIXME: fix it
 export interface HTMLAttributes extends AriaAttributes, JSX.CustomAttributes {
   // Standard HTML Attributes
   accesskey?: string | undefined | null;
@@ -1448,5 +1451,5 @@ export interface HTMLElementsAttributes {
 
 export type HTMLElements = {
   [Key in keyof HTMLElementsAttributes]: HTMLElementsAttributes[Key] &
-    EventHandlersOf<Key>;
+  EventHandlersOf<Key & keyof HTMLElementTagNameMap>;
 };

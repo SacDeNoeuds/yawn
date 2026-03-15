@@ -1,5 +1,5 @@
 {
-  "include": ["./src", "./yawn"],
+  "include": ["./src"],
   "compilerOptions": {
     "target": "ES2024",
     "module": "ES2022",
@@ -11,11 +11,7 @@
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "yawn/jsx",
-    "paths": {
-      "yawn": ["./yawn/index"],
-      "yawn/*": ["./yawn/*"]
-    },
+    "jsxImportSource": "@sacdenoeuds/yawn/jsx",
     "lib": ["ES2024", "DOM", "DOM.Iterable", "DOM.AsyncIterable", "ES2018.AsyncIterable", "ESNext.AsyncIterable"]
   }
 }

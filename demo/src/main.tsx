@@ -1,5 +1,5 @@
+import type { HTMLElements } from "@sacdenoeuds/yawn";
 import { Counter } from "./Counter";
-import type { HTMLElements } from "yawn";
 
 declare global {
   namespace JSX {
