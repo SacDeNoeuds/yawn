@@ -1,6 +1,6 @@
 {
   "name": "@sacdenoeuds/yawn",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "The JSX library to embrace JavaScript fatigue",
   "license": "MIT",
   "author": "SacDeNoeuds <sacdenoeuds.dev@gmail.com>",
