@@ -13,7 +13,7 @@ I could go on for a  very long while, to be honest.
 
 As you can see, plenty of changes even if you'd stick with the same library. Which is the opposite of what the web is: a never-breaking and evolving platform.
 
-This library intends to embrace the Webb's philosophy, by manipulating _only_ native Web APIs, offering a super-small API surface (~3 functions) and **providing an API which does not change by design because it is mirrored on Web APIs**.
+This library intends to embrace the Web's philosophy, by manipulating _only_ native Web APIs, offering a super-small API surface (~3 functions) and **providing an API which does not change by design because it is mirrored on Web APIs**.
 
 This library is the promise of a forever v1 💛
 
