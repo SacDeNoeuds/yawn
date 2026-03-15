@@ -13,6 +13,9 @@ I could go on for a  very long while, to be honest.
 
 As you can see, plenty of changes even if you'd stick with the same library. Which is the opposite of what the web is: a never-breaking and evolving platform.
 
+Although it looks like a diatribe, they all had to re-implement their version of everything b
+depending on how the Web Platform was at the time of their creation, and their choices pushed the Ecma committee to add features to the Web, so a big thanks is _also_ in order.
+
 This library intends to embrace the Web's philosophy, by manipulating _only_ native Web APIs, offering a super-small API surface (~3 functions) and **providing an API which does not change by design because it is mirrored on Web APIs**.
 
 This library is the promise of a forever v1 💛
