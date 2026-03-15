@@ -3,7 +3,7 @@
 The JSX library to embrace JavaScript fatigue.
 
 This library emerges from frameworks constantly deviating from Web Standards, trapping developers in the loop of continuously needing to learn tools that will disappear or change in the next ~5 years:
-- React went from classes to hooks, the added server-side apps
+- React went from classes to hooks, the added server-side apps, names the `input` event listener `onChange` instead of `onInput` (very few React developers actually know that, by the way).
 - Vue had the Option API and then added the Composition API to support ~hooks in disguise~ composables, introducing `@vue/reactivity` at the time. It reuses Web APIs names in non-compatible ways (hello Slot props)
 - Angular moved to RxJS in v2, now moved to Signals
 - Svelte moved from observable-ish stores to runes, and same as Vue it reuses Web APIs names in non-compatible ways (hello Slot props)
