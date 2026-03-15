@@ -1,7 +1,7 @@
 import { renderChildren, type Children } from "./create-node";
 import type { HTMLElements } from "./jsx/jsx";
-import { onConnected, onDisconnected } from "./lifecycle";
-import { AnyFunction, isAsyncIterable, isFunction } from "./utils";
+import { onConnected } from "./lifecycle";
+import { isAsyncIterable, isFunction, type AnyFunction } from "./utils";
 
 export type ElementProps<Tag extends keyof HTMLElements> = {
   [Key in keyof HTMLElements[Tag]]?: Key extends `on${string}`

@@ -1,6 +1,5 @@
-import "./styles.css";
 import { Counter } from "./Counter";
-import { HTMLElements } from "yawn";
+import type { HTMLElements } from "yawn";
 
 declare global {
   namespace JSX {

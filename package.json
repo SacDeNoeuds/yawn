@@ -2,19 +2,18 @@
   "name": "client-side-jsx-demo",
   "version": "1.0.0",
   "description": "Client-Side JSX Demo",
-  "main": "index.html",
+  "type": "module",
   "scripts": {
     "start": "vite",
     "build": "vite build"
   },
-  "dependencies": {
-    "vite": "5.4.1",
-    "@types/node": "22.4.0",
-    "vite-tsconfig-paths": "5.0.1",
-    "typescript": "5.5.4"
-  },
   "keywords": [
     "typescript",
     "javascript"
-  ]
+  ],
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.0"
+  }
 }

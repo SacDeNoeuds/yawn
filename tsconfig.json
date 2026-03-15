@@ -1,8 +1,8 @@
 {
   "include": ["./src", "./yawn"],
   "compilerOptions": {
-    "target": "ES2025",
-    "module": "ES2025",
+    "target": "ES2024",
+    "module": "ES2022",
     "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "verbatimModuleSyntax": true,
@@ -16,6 +16,6 @@
       "yawn": ["./yawn/index"],
       "yawn/*": ["./yawn/*"]
     },
-    "lib": ["DOM", "DOM.Iterables", "DOM.AsyncIterable", "ES2018.AsyncIterable", "ESNext.AsyncIterable"]
+    "lib": ["ES2024", "DOM", "DOM.Iterable", "DOM.AsyncIterable", "ES2018.AsyncIterable", "ESNext.AsyncIterable"]
   }
 }
