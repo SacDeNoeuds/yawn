@@ -2,12 +2,23 @@
 
 The JSX library to embrace JavaScript fatigue.
 
-This library emerges from frameworks constantly deviating from Web Standards, trapping developers in the loop of continuously needing to learn tools that will disappear in ~5 years.
+This library emerges from frameworks constantly deviating from Web Standards, trapping developers in the loop of continuously needing to learn tools that will disappear or change in the next ~5 years:
+- React went from classes to hooks, the added server-side apps
+- Vue had the Option API and then added the Composition API to support ~hooks in disguise~ composables, introducing `@vue/reactivity` at the time. It reuses Web APIs names in non-compatible ways (hello Slot props)
+- Angular moved to RxJS in v2, now moved to Signals
+- Svelte moved from observable-ish stores to runes, and same as Vue it reuses Web APIs names in non-compatible ways (hello Slot props)
+- As much as I like SolidJS (my favorite so far !), it adds directives, stores, requires some special control-flow function or components to render a signal of arrays, and with an error-prone quirk of requiring to NOT destructure component props.
 
-This library is the exact opposite, it manipulates _only_ native Web APIs:
+I could go on for a while, to be honest.
+
+As you can see, plenty of changes even if you'd stick with the same library. Which is the opposite of what the web is: a never-breaking and evolving platform.
+
+This library intends to embrace the Webb's philosophy, by manipulating _only_ native Web APIs, offering a super-small API surface (~3 functions) and **providing an API which does not change by design because it is mirrored on Web APIs**.
+
+This library is the promise of a forever v1 💛
 
 - JSX elements return HTML elements: `const element: HTMLDivElement = <div />`.
-- The markup is based on HTML standard:
+- The mark-up is based on HTML standard:
   - event listeners are lowercase: `<div onclick={…} />`.
   - attributes are the same: `<div class="some class" />`.
   - The only addition is the special `ref` attribute to access an element straight after its creation.
@@ -15,7 +26,7 @@ This library is the exact opposite, it manipulates _only_ native Web APIs:
 - Reactivity is powered by `AsyncIterable` – see more below.
 - As for CSS, I suggest you use the excellent scope at-rule ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope)) and stick to simple `.css` stylesheets.
 
-Because of this approach, the library is super slim: **2.6kB _rendered_**.
+Because of this approach, the library is super slim: **2.6kB _rendered_ !**.
 
 ## Foreword
 
@@ -32,7 +43,9 @@ npm i -D @sacdenoeuds/yawn
 ```
 
 Why `yawn`?
-I don't know why, I like it. Maybe because it fights JavaScript fatigue? Or because I love so much boring technology?
+I don't know why, I like it.
+
+Maybe because it fights JavaScript fatigue? Or because I love so much boring technology?
 
 ### Creating a component
 
@@ -56,6 +69,7 @@ export function Counter() {
   const count = createState(0)
   const decrement = () => count.update((count) => count - 1);
   const increment = () => count.update((count) => count + 1);
+  const reset = () => count.set(0);
 
   return (
     <div class="counter" data-count={count}>
@@ -71,7 +85,7 @@ export function Counter() {
 }
 ```
 
-A read-only `State` is basically an `AsyncIterable`
+A read-only state is basically an `AsyncIterable`
 
 To be writable, a `State` provides 2 additional methods:
 
@@ -80,11 +94,11 @@ To be writable, a `State` provides 2 additional methods:
 
 State composition can be achieved by composing native `AsyncIterable`, which may involve a learning curve but once you climbed it, you earned JS knowledge that will remain forever 💛.
 
-#### How can an `AsyncIterable` be used for reactivity
+#### How js `AsyncIterable` used for reactivity
 
 Picture this:
 
-- the first value of the async iterable is its initial value at the time of `for await (…)` declaration
+- the first value of the async iterable is its current value at the time of `for await (…)` declaration
 - all the next values are state updates
 - the async iterable awaits each next update.
 
@@ -92,30 +106,32 @@ And there you have it.
 
 ### Lifecycle
 
-Use `onConnected(node, callback)` and `onDisconnected(node, callback)`
+Use `onConnected(element, callback)` and `onDisconnected(element, callback)`
 
 ```tsx
 import { createState, onConnected, onDisconnected } from '@sacdenoeuds/yawn'
 
-export function Clock() {
-    const time = createState(new Date())
-    function init(element: HTMLElement) {
-        let interval;
-        onConnected(element, () => {
-            interval = setInterval(() => {
-                time.set(new Date())
-            }, 1_000);
-        })
-        onDisconnected(element, () => {
-            clearInterval(interval)
-        })
-    }
+// re-usable and testable function, a bit like hooks and composables.
+const initClock = (clock: State<Date>) => (element: HTMLElement) => {
+  let interval;
+  onConnected(element, () => {
+    interval = setInterval(() => {
+      time.set(new Date())
+    }, 1_000);
+  })
+  onDisconnected(element, () => {
+    clearInterval(interval)
+  })
+}
 
-    return (
-        <div ref={init}>
-            {formatTime(time)}
-        </div>
-    )
+export function Clock() {
+  const time = createState(new Date())
+
+  return (
+    <div ref={initClock(time)}>
+      {formatTime(time)}
+    </div>
+  )
 }
 ```
 
