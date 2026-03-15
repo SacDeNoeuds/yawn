@@ -1,0 +1,21 @@
+{
+  "include": ["./src", "./yawn"],
+  "compilerOptions": {
+    "target": "ES2025",
+    "module": "ES2025",
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
+    "verbatimModuleSyntax": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "yawn/jsx",
+    "paths": {
+      "yawn": ["./yawn/index"],
+      "yawn/*": ["./yawn/*"]
+    },
+    "lib": ["DOM", "DOM.Iterables", "DOM.AsyncIterable", "ES2018.AsyncIterable", "ESNext.AsyncIterable"]
+  }
+}
