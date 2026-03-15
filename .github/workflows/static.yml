@@ -34,7 +34,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build Demo App
-        run: cd ./demo && && npm ci && npm run build && cd ..
+        run: cd ./demo && npm ci && npm run build && cd ..
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
