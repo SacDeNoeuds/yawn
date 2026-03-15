@@ -78,7 +78,7 @@ To be writable, a `State` provides 2 additional methods:
 - `set(nextValue)`
 - `update((previous) => buildNextValueFromPrevious(previous))`
 
-State composition can be achieved by composing native `AsyncIterable`, which may involve a learning curve but once you climbed it, your earned JS knowledge will remain forever 💛.
+State composition can be achieved by composing native `AsyncIterable`, which may involve a learning curve but once you climbed it, you earned JS knowledge that will remain forever 💛.
 
 #### How can an `AsyncIterable` be used for reactivity
 
@@ -91,6 +91,8 @@ Picture this:
 And there you have it.
 
 ### Lifecycle
+
+Use `onConnected(node, callback)` and `onDisconnected(node, callback)`
 
 ```tsx
 import { createState, onConnected, onDisconnected } from '@sacdenoeuds/yawn'
