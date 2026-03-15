@@ -34,7 +34,7 @@ Because it is pure & standard JavaScript, the pros are massive:
 2. You get all the ecosystem for free ; (soon-to-come) helpers like map, filter, reduce, take, etc of the iterator protocol. Polyfill already available via [core-js](https://core-js.io/v4/docs/features/proposals/asynciterator-helpers).
 3. Any library helper for async iterators will work out-of-the-box. A bunch of them are pointed out in the [proposal](https://github.com/tc39/proposal-iterator-helpers?tab=readme-ov-file#prior-art--userland-implementations). Another worth mentioning is [fx-ts](https://fxts.dev/)
 4. Such a reactivity system weighs literally just a few bytes compared to 10+kB gzipped of existing solutions like Vue's, see the [implementation](https://github.com/SacDeNoeuds/yawn/blob/main/yawn/src/reactivity.ts).
-5. Async iteranles are lazily evaluated, therefore super efficient and result in a fine-grained reactivity, pull-based like signals: if you don't `for await (…)` nothing happens.
+5. Async iterables are lazily evaluated, therefore super efficient and result in a fine-grained reactivity, pull-based like signals: if you don't `for await (…)` nothing happens.
 6. Some objects are already implementing the async iterator protocol like WebSocket, Server-Sent Events, ReadableStream, etc., you could even drive your frontend state from your backend streams !
 7. The door is wide opened for state history or state travel using Iterable helpers.
 8. One cannot forget to track a dependency: there is no access to the current value without iterating on the iterable.
@@ -48,9 +48,9 @@ Compared to Signals, automatic dependency tracking is lost, I consider this to a
 
 Finally, yet another JSX runtime must be created to support Async Iterables as attribute values or children.
 
-Which I [did](https://github.com/SacDeNoeuds/yawn) and it weighs [1.5kB gzipped](https://sacdenoeuds.github.io/yawn/bundle-stats.html).
+Which I [did](https://github.com/SacDeNoeuds/yawn) and it weighs [1.5kB gzipped](https://sacdenoeuds.github.io/yawn/bundle-stats.html). The JSX runtime implementation's design leaves room for future changes like hydration.
 
-It represents quite some work if one wants to propose as much features as React for Solid though.
+It represents quite some work if one wants to propose as much features as React, Vue, Next/Nuxt, Svelte(Kit) or Solid(Start) though.
 
 ## Closing words
 
