@@ -2,6 +2,7 @@ import type { UserConfig } from "vite";
 import analyzer from 'vite-bundle-analyzer';
 
 const config: UserConfig = {
+  base: process.env.CI ? "/yawn/" : "/",
   resolve: {
     tsconfigPaths: true,
   },
