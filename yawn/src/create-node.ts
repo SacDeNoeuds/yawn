@@ -22,9 +22,11 @@ export const renderChildren = (
   element: Element | DocumentFragment,
   ...children: Children[]
 ) => {
-  children.flat(5).forEach((child) => {
+  children.forEach((child) => {
     isAsyncIterable(child)
       ? renderAsyncIterableChild(element, child)
+      : Array.isArray(child)
+      ? renderChildren(element, ...child)
       : renderChild(element, child);
   });
 };
@@ -44,9 +46,8 @@ const renderAsyncIterableChild = (
   // let previousNode: Node;
   async function render() {
     for await (const childOrList of child) {
-      if (!element.isConnected) break; // stop subscription to state
       const asList = Array.isArray(childOrList) ? childOrList : [childOrList];
-      const nodes = asList.flat(2).flatMap(childToNodes);
+      const nodes = asList.flatMap(childToNodes);
       const anchor = previousNodes[0];
 
       if (!anchor || anchor.parentElement !== element) element.append(...nodes);
@@ -59,8 +60,10 @@ const renderAsyncIterableChild = (
         element.removeChild(anchorCopy);
       }
       previousNodes = nodes;
+      if (!element.isConnected) break; // stop subscription to state
     }
   }
+  render();
   onConnected(element, render);
 };
 
@@ -90,5 +93,6 @@ export const childToNodes = (child: Child): Node[] => {
     node.outerHTML = child[raw];
     return [node];
   }
+  console.debug('child', child)
   absurd(child);
 };

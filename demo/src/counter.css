@@ -7,6 +7,7 @@
         font-variant-numeric: tabular-nums;
     }
     button {
+        user-select: none;
         width: 2em;
         height: 2em;
         border: none;

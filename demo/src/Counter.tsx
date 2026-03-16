@@ -1,11 +1,10 @@
-import { createState } from "@sacdenoeuds/yawn";
+import { State } from "@sacdenoeuds/yawn";
 import './counter.css';
 
 interface Props {
-  initialCount?: number;
+  count: State<number>;
 }
-export function Counter({ initialCount = 0 }: Props) {
-  const count = createState(initialCount);
+export function Counter({ count }: Props) {
   const decrement = () => count.update((count) => count - 1);
   const increment = () => count.update((count) => count + 1);
 
