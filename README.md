@@ -3,18 +3,21 @@
 The JSX library to embrace JavaScript fatigue.
 
 This library emerges from frameworks constantly deviating from Web Standards, trapping developers in the loop of continuously needing to learn tools that will disappear or change in the next ~5 years, to mention a few critics – and those are just the **tip of the iceberg**:
+
+> [!NOTE]
+> 
+> The critics I am about to share **are not a diatribe**, all these tools had to re-implement their version of everything depending on the state (🤭) of the Web Platform was at the time of their creation, and their choices pushed the Ecma committee to add features to the Web, so a **big thanks is in order**.
+
+Now that the mindset is clarified, let's go back to those critics:
 - React went from classes to hooks, then added server-side apps, and decided to name the `input` event listener `onChange` instead of `onInput` which is the real standard listener (very few React developers actually know that, by the way). It took **years** to support custom elements. The list is really long when it comes to React.
 - Vue had the Option API and then added the Composition API to support ~hooks in disguise~ composables, introducing `@vue/reactivity` at the time. It reuses Web APIs names in non-compatible ways (hello Slot props, templates).
 - Angular moved to RxJS in v2, now moved to Signals.
 - Svelte moved from observable-ish stores to runes, and same as Vue it reuses Web APIs names in non-compatible ways (hello Slot props).
-- As much as I like SolidJS (my favorite so far), it adds directives, stores, requires some special control-flow function or components to render a signal of arrays, and with an error-prone quirk of requiring to NOT destructure component props.
+- As much as I like SolidJS (my favorite so far), it adds directives, stores, and with an error-prone quirk of requiring to NOT destructure component props.
 
 I could go on for a  very long while, to be honest.
 
 As you can see, plenty of changes even if you'd stick with the same library. Which is the opposite of what the web is: a never-breaking and evolving platform.
-
-Although it looks like a diatribe, they all had to re-implement their version of everything
-depending on the state (🤭) of the Web Platform was at the time of their creation, and their choices pushed the Ecma committee to add features to the Web, so a big thanks is _also_ in order.
 
 This library intends to embrace the Web's philosophy, by manipulating _only_ native Web APIs, offering a super-small API surface (~2 functions and 1 class) and **providing an API which does not change by design because it is mirrored on Web APIs**.
 
