@@ -13,10 +13,10 @@ I could go on for a  very long while, to be honest.
 
 As you can see, plenty of changes even if you'd stick with the same library. Which is the opposite of what the web is: a never-breaking and evolving platform.
 
-Although it looks like a diatribe, they all had to re-implement their version of everything b
-depending on how the Web Platform was at the time of their creation, and their choices pushed the Ecma committee to add features to the Web, so a big thanks is _also_ in order.
+Although it looks like a diatribe, they all had to re-implement their version of everything
+depending on the state (🤭) of the Web Platform was at the time of their creation, and their choices pushed the Ecma committee to add features to the Web, so a big thanks is _also_ in order.
 
-This library intends to embrace the Web's philosophy, by manipulating _only_ native Web APIs, offering a super-small API surface (~3 functions) and **providing an API which does not change by design because it is mirrored on Web APIs**.
+This library intends to embrace the Web's philosophy, by manipulating _only_ native Web APIs, offering a super-small API surface (~2 functions and 1 class) and **providing an API which does not change by design because it is mirrored on Web APIs**.
 
 This library is the promise of a forever v1 💛
 
@@ -39,6 +39,8 @@ Although overall functional, there might be some DX quirks. This library also ne
 
 If you want to see this going further, star the project, contribute to the project by getting in touch, or submit issues.
 
+If the project reaches 1,000 stars, I'll start making it production-ready.
+
 ## Getting Started
 
 ```sh
@@ -48,7 +50,7 @@ npm i -D @sacdenoeuds/yawn
 Why `yawn`?
 I don't know why, I like it.
 
-Maybe because it fights JavaScript fatigue? Or because I love so much boring technology?
+Maybe because it fights JavaScript fatigue? Or a tribute to beloved boring technology?
 
 ### Creating a component
 
@@ -97,7 +99,7 @@ To be writable, a `State` provides 2 additional methods:
 
 State composition can be achieved by composing native `AsyncIterable`, which may involve a learning curve but once you climbed it, you earned JS knowledge that will remain forever 💛.
 
-#### How js `AsyncIterable` used for reactivity
+#### How is `AsyncIterable` used for reactivity
 
 Picture this:
 
@@ -142,4 +144,6 @@ export function Clock() {
 
 If you made it until here, thank you 💛.
 
-You can take a look at [values](./VALUES.md) if you want to know more.
+If you want to contribute, take a look at [values](./VALUES.md).
+
+Cheers
