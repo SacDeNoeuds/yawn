@@ -2,24 +2,9 @@
 
 The JSX library to embrace JavaScript fatigue.
 
-This library emerges from frameworks constantly deviating from Web Standards, trapping developers in the loop of continuously needing to learn tools that will disappear or change in the next ~5 years, to mention a few critics – and those are just the **tip of the iceberg**:
+This library emerges from frameworks constantly deviating from Web Standards, trapping developers in the loop of continuously needing to learn tools that will disappear or change in the next ~5 years.
 
-> [!NOTE]
-> 
-> The critics I am about to share **are not a diatribe**, all these tools had to re-implement their version of everything depending on the state (🤭) of the Web Platform was at the time of their creation, and their choices pushed the Ecma committee to add features to the Web, so a **big thanks is in order**.
-
-Now that the mindset is clarified, let's go back to those critics:
-- React went from classes to hooks, then added server-side apps, and decided to name the `input` event listener `onChange` instead of `onInput` which is the real standard listener (very few React developers actually know that, by the way). It took **years** to support custom elements. The list is really long when it comes to React.
-- Vue had the Option API and then added the Composition API to support ~hooks in disguise~ composables, introducing `@vue/reactivity` at the time. It reuses Web APIs names in non-compatible ways (hello Slot props, templates).
-- Angular moved to RxJS in v2, now moved to Signals.
-- Svelte moved from observable-ish stores to runes, and same as Vue it reuses Web APIs names in non-compatible ways (hello Slot props).
-- As much as I like SolidJS (my favorite so far), it adds directives, stores, and with an error-prone quirk of requiring to NOT destructure component props.
-
-I could go on for a  very long while, to be honest.
-
-As you can see, plenty of changes even if you'd stick with the same library. Which is the opposite of what the web is: a never-breaking and evolving platform.
-
-This library intends to embrace the Web's philosophy, by manipulating _only_ native Web APIs, offering a super-small API surface (~2 functions and 1 class) and **providing an API which does not change by design because it is mirrored on Web APIs**.
+This library intends to embrace the Web's philosophy, by avoiding breaking changes, offering a super-small API surface (~2 functions and 1 class) and **providing an API which does not change by design because it is mirrored on Web APIs**.
 
 This library is the promise of a forever v1 💛
 
@@ -36,7 +21,9 @@ Because of this approach, the library is super slim: **2.6kB _rendered_ !**.
 
 ## Foreword
 
-⚠️ NOTE: This library is currently a **proof of concept**.
+> [!CAUTION]
+>
+> This library is currently a **proof of concept**.
 
 Although overall functional, there might be some DX quirks. This library also needs to be tested against memory leaks.
 
@@ -71,10 +58,10 @@ function Header() {
 ### Using reactivity (states)
 
 ```tsx
-import { createState } from '@sacdenoeuds/yawn'
+import { State } from '@sacdenoeuds/yawn'
 
 export function Counter() {
-  const count = createState(0)
+  const count = new State(0)
   const decrement = () => count.update((count) => count - 1);
   const increment = () => count.update((count) => count + 1);
   const reset = () => count.set(0);
@@ -117,26 +104,30 @@ And there you have it.
 Use `onConnected(element, callback)` and `onDisconnected(element, callback)`
 
 ```tsx
-import { createState, onConnected, onDisconnected } from '@sacdenoeuds/yawn'
+import { State, onConnected, onDisconnected } from '@sacdenoeuds/yawn'
 
-// re-usable and testable function, a bit like hooks and composables.
-const initClock = (clock: State<Date>) => (element: HTMLElement) => {
-  let interval;
-  onConnected(element, () => {
-    interval = setInterval(() => {
-      time.set(new Date())
-    }, 1_000);
-  })
-  onDisconnected(element, () => {
-    clearInterval(interval)
-  })
+function makeClock(time: State<Date>) {
+  let interval: ReturnType<typeof setInterval>
+  return {
+    startTicking() {
+      interval = setInterval(() => time.set(new Date()), 1_000)
+    },
+    stopTicking() {
+      clearInterval(interval)
+    },
+  }
 }
 
 export function Clock() {
-  const time = createState(new Date())
+  const time = new State(new Date())
+  const clock = makeClock(time)
+  const init = (element: HTMLElement) => {
+    onConnected(element, clock.startTicking)
+    onDisconnected(element, clock.stopTicking)
+  }
 
   return (
-    <div ref={initClock(time)}>
+    <div ref={init}>
       {formatTime(time)}
     </div>
   )
