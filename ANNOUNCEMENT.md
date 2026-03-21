@@ -4,6 +4,18 @@ Yesterday night (18th of March, 2026), I had an epiphany: **we _have_ reactivity
 
 In the name of … Async Iterables 🎉
 
+How it works:
+
+- the first value of the async iterable is its initial value at the time of `for await (…)` declaration
+- all the next values are state updates
+- the async iterable awaits each next update.
+
+That's it.
+
+A read-only state is basically an `AsyncIterable`, nothing more.
+
+State composition can be achieved by composing native `AsyncIterable` using soon-to-come [iterator helpers](https://github.com/tc39/proposal-async-iterator-helpers), which may involve a learning curve but once you climbed it, you earned JS knowledge that will remain forever 💛.
+
 ## Okay, then why making so much fuss?
 
 Because reactivity is what powers client-side rendering libraries, all of them. Rendering a simple div is easy, but how do you re-render when your state changes?
@@ -64,20 +76,10 @@ The forever v1 JSX library, mirrored on Web Standards & APIs to capitalize on yo
   - attributes are the same HTML's, no `className` or `htmlFor`: `<label class="some class" for="some-field-id" />`.
   - The only addition is the special `ref` attribute to access an element straight after its creation, and that is debatable at this stage.
 - No `onMount`, `useEffect` or any special concept, as mentioned by [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected) elements are "connected" and "disconnected" from the DOM.
-- Reactivity is powered by `AsyncIterable` – see more below.
+- Reactivity is powered by `AsyncIterable` – see examples below.
 - As for CSS, I suggest you use the excellent scope at-rule ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope)) and stick to simple `.css` stylesheets.
 
 Because of this approach, the library is super slim: **2.6kB _rendered_ !**
-
-## Reactivity with Async Iterables
-
-How it works:
-
-- the first value of the async iterable is its initial value at the time of `for await (…)` declaration
-- all the next values are state updates
-- the async iterable awaits each next update.
-
-That's it.
 
 ## Proof of Concept – a glimpse of the API
 
@@ -85,14 +87,12 @@ The demo is located at https://github.com/SacDeNoeuds/yawn/tree/main/demo
 
 ### Example of a component with reactive state
 
-A read-only state is basically an `AsyncIterable`, nothing more.
-
 To be writable, Yawn exposes a `State` class providing 2 additional methods:
 
 - `set(nextValue)`
 - `update((previous) => nextValueFromPrevious(previous))`
 
-State composition can be achieved by composing native `AsyncIterable` using soon-to-come [iterator helpers](https://github.com/tc39/proposal-async-iterator-helpers), which may involve a learning curve but once you climbed it, you earned JS knowledge that will remain forever 💛.
+You can chck the implementation [here](The demo is located at https://github.com/SacDeNoeuds/yawn/tree/main/yawn/src/reactivity.ts)
 
 Here’s good ol’ `Counter` example.
 
