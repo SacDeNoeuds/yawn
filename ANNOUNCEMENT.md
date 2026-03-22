@@ -22,7 +22,7 @@ async function* fetchTodo(todoId: TodoId) {
   try {
     const response = await fetch(`…/todo/${todoId}`)
     const todo = await response.json()
-    yield { status: 'success', todo }
+    yield { status: 'success', todo } as const
   } catch (error) {
     yield { status: 'failure', error } as const
   }
