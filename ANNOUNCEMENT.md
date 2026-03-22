@@ -73,11 +73,11 @@ I could go on for a very long while, to be honest.
 
 Now remember, any client-side rendering library is _coupled_ to its reactivity system. Therefore, we cannot just say "Hey, change your reactivity system and you're good to go". But what if…
 
-_What if_ I made that client-side library and tackle two problems at once?
+_What if_ we had that client-side library that tackles two problems at once?
 - the need to learn a new reactivity system that will get obsolete in ~5 years
 - the need to learn a new client-side rendering library that will get obsolete in ~5 years
 
-_What if_ I published a library embracing the Web's philosophy, by offering a super-small API surface on top of Web APIs (~2 functions and 1 class) and **providing an API which does not change _by design_ because it is mirrored on Web APIs**?
+_What if_ we had a library embracing the Web's philosophy, by offering a super-small API surface on top of Web APIs (~2 functions and 1 class) and **providing an API which does not change _by design_ because it is mirrored on Web APIs**?
 
 The mantra being: **You know Web Standards & APIs ↔︎ You know the library's API**.
 
