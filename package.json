@@ -1,0 +1,22 @@
+{
+  "name": "yawn-monorepo",
+  "version": "1.0.0",
+  "description": "Tooling around Yawn",
+  "type": "module",
+  "scripts": {
+    "predemo": "cd ./yawn && npm ci && npm run build && cd ..",
+    "demo": "cd ./demo && npm ci && npm start",
+    "predemo:build": "cd ./yawn && npm ci && npm run build && cd ..",
+    "demo:build": "cd ./demo && npm ci && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SacDeNoeuds/yawn.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SacDeNoeuds/yawn/issues"
+  },
+  "homepage": "https://github.com/SacDeNoeuds/yawn#readme"
+}

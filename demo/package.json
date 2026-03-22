@@ -12,8 +12,9 @@
     "javascript"
   ],
   "devDependencies": {
-    "@sacdenoeuds/yawn": "^0.1.0",
+    "@sacdenoeuds/yawn": "file:../yawn",
     "@types/node": "^25.5.0",
+    "iterator-polyfill": "^1.0.9",
     "typescript": "^5.9.3",
     "vite": "^8.0.0",
     "vite-bundle-analyzer": "^1.3.6"
