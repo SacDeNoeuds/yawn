@@ -177,8 +177,8 @@ export function TodoPage({ todoId }: Props) {
 function Todo({ todo }) {
   return (
     <ul>
-      <li>id: {todo.map((todo) => todo.id)}</li>
-      <li>title: {todo.map((todo) => todo.title)}</li>
+      <li>id: {todo.id)}</li>
+      <li>title: {todo.title)}</li>
       …
     </ul>
   )
