@@ -174,14 +174,20 @@ export function TodoPage({ todoId }: Props) {
   }
 }
 
-function Todo({ todo }) {
-  return (
-    <ul>
-      <li>id: {todo.id}</li>
-      <li>title: {todo.title}</li>
-      …
-    </ul>
-  )
+async function* fetchTodo(todoId: number) {
+  yield { status: 'pending' } as const
+  //  ^-> emits a state update
+
+  try {
+    const response = await fetch(`…/todo/${todoId}`)
+    const todo = await response.json()
+
+    yield { status: 'success', todo } as const
+    //  ^-> emits a state update
+  } catch (error) {
+    yield { status: 'failure', error } as const
+    //  ^-> emits a state update
+  }
 }
 ```
 
@@ -204,6 +210,16 @@ export function SomeOverlay() {
       unsubscribe = onClickOutside(element, () => …)
     })
     onDisconnected(element, () => unsubscribe())
+  }
+
+  // or something a bit react useEffect-like
+  const init = () => {
+    onConnected(element, () => {
+      const unsubscribe = onClickOutside(element, () => {…})
+
+      // on element disconnected
+      return () => unsubscribe()
+    })
   }
 
   return (
