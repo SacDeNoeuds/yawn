@@ -95,24 +95,32 @@ The mantra being: **You know Web Standards & APIs ↔︎ You know the library's 
 
 The promise of a forever v1 library 💛
 
-## Here comes Yawn, the forever v1 library
+## Here comes Yawn, the forever v1 library embryo
 
-The forever v1 JSX library, mirrored on Web Standards & APIs to capitalize on your knowledge and embrace JavaScript fatigue.
+The library is mirrored on Web Standards & APIs to capitalize on your knowledge and embrace JavaScript fatigue.
 
-- JSX elements return HTML elements: `const element: HTMLDivElement = <div />`.
+- JSX elements return HTML elements: `const element: HTMLDivElement = <div />`
 - The mark-up is mirrored on HTML standard:
-  - event listeners are lowercase: `<div onclick={…} />`.
-  - attributes are the same HTML's, no `className` or `htmlFor`: `<label class="some class" for="some-field-id" />`.
-  - The only addition is the special `ref` attribute to access an element straight after its creation, and that is debatable at this stage.
-- No `onMount`, `useEffect` or any special concept, as mentioned by [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected) elements are "connected" and "disconnected" from the DOM.
-- Reactivity is powered by `AsyncIterable` – see examples below.
-- As for CSS, I suggest you use the excellent scope at-rule ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope)) and stick to simple `.css` stylesheets.
+  - event listeners are lowercase: `<div onclick={…} />`
+  - attributes are the same as HTML's: `<label class="some class" for="some-field-id" />`
+    - no `className` attribute, directly `class`
+    - no `htmlFor` attribute, directly `for`
+  - The only addition is the – debatable – special `ref` attribute to access an element straight after its creation
+- No `onMount`, `useEffect` or any special concept, as mentioned by [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected) elements are "connected" and "disconnected" from the DOM
+- Reactivity is powered by `AsyncIterable` – see more examples below
+- As for CSS, I suggest you use the excellent scope at-rule ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@scope)) and stick to simple `.css` stylesheets
 
 Because of this approach, the library is super slim: **2.6kB _rendered_ !**
 
+If you are interested in pushing this further, please star the project. If the repo reaches 1,000+ stars I will start making it production-ready and look for contributors.
+
+You can also open issues to start discussions.
+
 ## Proof of Concept – a glimpse of the API
 
-The demo is located at https://github.com/SacDeNoeuds/yawn/tree/main/demo
+The demo is located at https://github.com/SacDeNoeuds/yawn/tree/main/demo and deployed at https://sacdenoeuds.github.io/yawn/
+
+Run it locally by cloning the project and run `npm run demo`.
 
 ### Example of a component with reactive state
 
@@ -141,7 +149,6 @@ export function Counter() {
       </button>
 
       <span>{count}</span>
-      <span class="doubled">{count.map((count) => count * 2)}</span>
 
       <button type="button" onclick={increment}>
         +
@@ -151,6 +158,32 @@ export function Counter() {
 }
 ```
 
+
+## Example of a derived state
+
+Let's take the example of a todo details page.
+
+```tsx
+type Props = { todoId: number }
+export function TodoPage({ todoId }: Props) {
+  const todoState = fetchTodo(todoId)
+  switch (todoState.status) {
+    case 'pending': return <div>Loading…</div>
+    case 'failure': return <div>Uh-oh, something went wrong</div>
+    case 'success': return <Todo todo={todoState.todo} />
+  }
+}
+
+function Todo({ todo }) {
+  return (
+    <ul>
+      <li>id: {todo.map((todo) => todo.id)}</li>
+      <li>title: {todo.map((todo) => todo.title)}</li>
+      …
+    </ul>
+  )
+}
+```
 
 ### Example of connected/disconnected lifecycles
 
@@ -204,7 +237,7 @@ Which I [did](https://github.com/SacDeNoeuds/yawn) and it weighs [1.5kB gzipped]
 
 ## Closing words
 
-If anyone is interested in pushing this further and document it, star the project. If the repo reaches 1,000+ stars I will start making it production-ready.
+Again, if you are interested in pushing this further, please star the project. If the repo reaches 1,000+ stars I will start making it production-ready.
 
 You can also help out or get in touch on GitHub by creating [an issue](https://github.com/SacDeNoeuds/yawn/issues) ☺️.
 
