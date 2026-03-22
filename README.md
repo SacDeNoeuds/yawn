@@ -112,7 +112,7 @@ The library is mirrored on Web Standards & APIs to capitalize on your knowledge 
 
 Because of this approach, the library is super slim: **2.6kB _rendered_ !**
 
-If you are interested in pushing this further, please star the project. If the repo reaches 1,000+ stars I will start making it production-ready and look for contributors.
+If you are interested in pushing this further, please star the project. If the repo reaches 5,000+ stars I will start making it production-ready and look for contributors.
 
 You can also open issues to start discussions.
 
@@ -240,7 +240,7 @@ Which I [did](https://github.com/SacDeNoeuds/yawn) and it weighs [1.5kB gzipped]
 
 ## Closing words
 
-Again, if you are interested in pushing this further, please star the project. If the repo reaches 1,000+ stars I will start making it production-ready.
+Again, if you are interested in pushing this further, please star the project. If the repo reaches 5,000+ stars I will start making it production-ready.
 
 You can also help out or get in touch on GitHub by creating [an issue](https://github.com/SacDeNoeuds/yawn/issues) ☺️.
 
