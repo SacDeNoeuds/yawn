@@ -36,7 +36,7 @@ function App() {
 
       <Section
         heading="Text stream demo"
-        linkToSourceCode="https://github.com/SacDeNoeuds/yawn/blob/main/demo/src/TextStreamDemo.tsx"
+        linkToSourceCode="https://github.com/SacDeNoeuds/yawn/blob/main/demo/src/TextStream.tsx"
       >
         <TextStreamDemo />
       </Section>
