@@ -42,6 +42,16 @@ async function* makeClock(intervalInMs: number) {
 const clock = makeClock(1_000)
 //    ^-> this is a valid state.
 ```
+And finally, if for some reason you want to fetch your todo every second:
+```ts
+async function* todoPoller(todoId: TodoId) {
+  for await (const tick of clock) {
+    yield* fetchTodo(todoId)
+  }
+}
+const polledTodo = todoPoller(1)
+//    ^-> this is a valid state.
+```
 
 State composition can be achieved by composing native `AsyncIterable` using soon-to-come [iterator helpers](https://github.com/tc39/proposal-async-iterator-helpers), which may involve a learning curve but once you climbed it, you earned JS knowledge that will remain forever 💛.
 
