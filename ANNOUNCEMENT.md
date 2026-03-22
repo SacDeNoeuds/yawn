@@ -14,6 +14,23 @@ That's it.
 
 A read-only state is basically an `AsyncIterable`, nothing more.
 
+To take an example, this is a valid state:
+```ts
+type TodoId = number
+async function* fetchTodo(todoId: TodoId) {
+  yield { status: 'pending' } as const
+  try {
+    const response = await fetch(`…/todo/${todoId}`)
+    const todo = await response.json()
+    yield { status: 'success', todo }
+  } catch (error) {
+    yield { status: 'failure', error } as const
+  }
+}
+const todo = fetchTodo(1)
+//    ^-> this is a valid state.
+```
+
 State composition can be achieved by composing native `AsyncIterable` using soon-to-come [iterator helpers](https://github.com/tc39/proposal-async-iterator-helpers), which may involve a learning curve but once you climbed it, you earned JS knowledge that will remain forever 💛.
 
 ## Okay, then why making so much fuss?
