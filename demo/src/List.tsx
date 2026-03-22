@@ -5,7 +5,7 @@ export function List({ numberOfItems }: Props) {
     return (
         <div>
             <div>Number of items: {numberOfItems}</div>
-            <ul>
+            <ul style="padding-left: 1rem">
                 {numberOfItems.map((numberOfItems) => {
                     return Array.from({ length: numberOfItems }, (_, index) => {
                         return <li>{index + 1}</li>

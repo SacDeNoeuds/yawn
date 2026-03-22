@@ -29,13 +29,13 @@ button {
   display: flex;
   flex-direction: column;
   
-  & .gap-s {
+  &.gap-s {
     gap: 0.5rem;
   }
-  & .gap-m {
+  &.gap-m {
     gap: 1rem;
   }
-  & .gap-l {
+  &.gap-l {
     gap: 2rem;
   }
 }
