@@ -45,7 +45,7 @@ const todoOfPage = fetchPageTodo(route.params.todoId)
 
 State composition can be achieved by composing native `AsyncIterable` using soon-to-come [iterator helpers](https://github.com/tc39/proposal-async-iterator-helpers), which may involve a learning curve but once you climbed it, you earned JS knowledge that will remain forever 💛.
 
-## Okay, then why making so much fuss?
+## Okay, then why making such a fuss?
 
 Because reactivity is what powers client-side rendering libraries, all of them. Rendering a simple div is easy, but how do you re-render when your state changes?
 
