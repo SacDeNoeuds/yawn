@@ -56,4 +56,11 @@ button {
   padding: 2rem;
   background: #fff;
   border-radius: 1rem;
+
+  & > header {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
