@@ -191,6 +191,9 @@ This is the equivalent of React’s `useEffect` or Vue’s `onMount/onUnmount`.
 
 Use `onConnected(element, callback)` and `onDisconnected(element, callback)`
 
+> [!NOTE]
+> At this stage the functions signatures can still be discussed
+
 ```tsx
 import { State, onConnected, onDisconnected } from '@sacdenoeuds/yawn'
 
