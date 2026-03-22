@@ -109,7 +109,7 @@ To be writable, Yawn exposes a `State` class providing 2 additional methods:
 - `set(nextValue)`
 - `update((previous) => nextValueFromPrevious(previous))`
 
-You can chck the implementation [here](The demo is located at https://github.com/SacDeNoeuds/yawn/tree/main/yawn/src/reactivity.ts)
+You can check the implementation [here](https://github.com/SacDeNoeuds/yawn/tree/main/yawn/src/reactivity.ts)
 
 Here’s good ol’ `Counter` example.
 
