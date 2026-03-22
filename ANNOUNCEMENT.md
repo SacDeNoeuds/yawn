@@ -31,6 +31,18 @@ const todo = fetchTodo(1)
 //    ^-> this is a valid state.
 ```
 
+Another example:
+```ts
+async function* makeClock(intervalInMs: number) {
+  while (true) {
+    yield new Date()
+    await delay(intervalInMs)
+  }
+}
+const clock = makeClock(1_000)
+//    ^-> this is a valid state.
+```
+
 State composition can be achieved by composing native `AsyncIterable` using soon-to-come [iterator helpers](https://github.com/tc39/proposal-async-iterator-helpers), which may involve a learning curve but once you climbed it, you earned JS knowledge that will remain forever 💛.
 
 ## Okay, then why making so much fuss?
@@ -149,24 +161,13 @@ Use `onConnected(element, callback)` and `onDisconnected(element, callback)`
 ```tsx
 import { State, onConnected, onDisconnected } from '@sacdenoeuds/yawn'
 
-function makeClock(time: State<Date>) {
-  let interval: ReturnType<typeof setInterval>
-  return {
-    startTicking() {
-      interval = setInterval(() => time.set(new Date()), 1_000)
-    },
-    stopTicking() {
-      clearInterval(interval)
-    },
-  }
-}
-
-export function Clock() {
-  const time = new State(new Date())
-  const clock = makeClock(time)
+export function SomeOverlay() {
   const init = (element: HTMLElement) => {
-    onConnected(element, clock.startTicking)
-    onDisconnected(element, clock.stopTicking)
+    let unsubscribe = () => {}
+    onConnected(element, () => {
+      unsubscribe = onClickOutside(element, () => …)
+    })
+    onDisconnected(element, () => unsubscribe())
   }
 
   return (
