@@ -31,25 +31,15 @@ const todo = fetchTodo(1)
 //    ^-> this is a valid state.
 ```
 
-Another example:
+Another example of a todo fetcher based on a todo id in route parameters:
+
 ```ts
-async function* makeClock(intervalInMs: number) {
-  while (true) {
-    yield new Date()
-    await delay(intervalInMs)
-  }
-}
-const clock = makeClock(1_000)
-//    ^-> this is a valid state.
-```
-And finally, if for some reason you want to fetch your todo every second:
-```ts
-async function* todoPoller(todoId: TodoId) {
-  for await (const tick of clock) {
+async function* fetchPageTodo(todoIds: AsyncIterable<TodoId>) {
+  for await (const todoId of todoIds) {
     yield* fetchTodo(todoId)
   }
 }
-const polledTodo = todoPoller(1)
+const todoOfPage = fetchPageTodo(route.params.todoId)
 //    ^-> this is a valid state.
 ```
 
