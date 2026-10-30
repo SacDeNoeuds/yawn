@@ -1,1 +1,2 @@
 npx lint-staged
+cd ./yawn && npm run check-ts && CI=1 npm run test

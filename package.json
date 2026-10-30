@@ -27,6 +27,6 @@
     "oxfmt": "^0.75.0"
   },
   "lint-staged": {
-    "*": "npx oxfmt --no-error-on-unmatched-pattern && cd yawn && npm run check-ts && CI=1 npm run test"
+    "*": "npx oxfmt --no-error-on-unmatched-pattern"
   }
 }
