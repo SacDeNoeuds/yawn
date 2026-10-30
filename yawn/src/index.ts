@@ -1,3 +1,4 @@
-export { State } from "./reactivity";
-export type { HTMLElements } from "./jsx/jsx";
-export { onConnected, onDisconnected } from './lifecycle'
+export type { HTMLElements } from "./jsx/jsx"
+export { onConnected } from './lifecycle'
+export { State } from "./reactivity"
+

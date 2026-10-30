@@ -9,7 +9,7 @@ import { State } from './reactivity'
  * how should we re-render without duplicating elements?
  */
 describe('Array Rendering - Investigation', () => {
-  let container: HTMLDivElement
+  let container: HTMLUListElement
 
   beforeEach(() => {
     container = document.createElement('ul')

@@ -6,7 +6,7 @@
  */
 
 interface Listener {
-  listener: () => void | (() => void)
+  listener: () => unknown | (() => void)
   cleanup?: () => void
 }
 
@@ -15,15 +15,16 @@ const listeners = new Map<Node, Set<Listener>>()
 /**
  * Fires callback when element is connected to DOM.
  * If callback returns a function, it will be called on disconnect (cleanup).
+ * Callback can be async and return Promise<void> or a cleanup function.
  * 
  * @param element - The element to observe
  * @param callback - Fire on connect, optionally returns cleanup function for disconnect
  */
 export function onConnected(
   element: Node,
-  callback: () => void | (() => void)
+  callback: () => unknown | (() => void)
 ): void {
-  const entry = { listener: callback }
+  const entry: Listener = { listener: callback }
   
   // Register the listener
   const set = listeners.get(element) ?? new Set()
@@ -32,9 +33,10 @@ export function onConnected(
   
   // Fire immediately if already connected
   if (element.isConnected) {
-    const cleanup = callback()
-    if (typeof cleanup === 'function') {
-      entry.cleanup = cleanup
+    const cleanupOrPromise = callback()
+    const isFunction = typeof cleanupOrPromise === 'function'
+    if (isFunction) {
+      entry.cleanup = cleanupOrPromise as () => void
     }
   }
 }
@@ -63,11 +65,11 @@ function handleConnect(element: Node): void {
   if (!set) return
   
   for (const entry of set) {
-    const cleanup = entry.listener()
+    const result = entry.listener()
     
     // If it returns a function, store as cleanup
-    if (typeof cleanup === 'function') {
-      entry.cleanup = cleanup
+    if (typeof result === 'function') {
+      entry.cleanup = result as () => void
     } else {
       entry.cleanup = undefined
     }

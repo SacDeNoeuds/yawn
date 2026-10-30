@@ -15,42 +15,42 @@ describe('create-node', () => {
       const nodes = childToNodes('Hello World')
       
       expect(nodes).toHaveLength(1)
-      expect(nodes[0].nodeType).toBe(Node.TEXT_NODE)
-      expect((nodes[0] as Text).data).toBe('Hello World')
+      expect(nodes[0]?.nodeType).toBe(Node.TEXT_NODE)
+      expect((nodes[0] as Text)?.data).toBe('Hello World')
     })
 
     it('should convert number to text node', () => {
       const nodes = childToNodes(42)
       
       expect(nodes).toHaveLength(1)
-      expect(nodes[0].nodeType).toBe(Node.TEXT_NODE)
-      expect((nodes[0] as Text).data).toBe('42')
+      expect(nodes[0]?.nodeType).toBe(Node.TEXT_NODE)
+      expect((nodes[0] as Text)?.data).toBe('42')
     })
 
     it('should convert null to empty text node', () => {
       const nodes = childToNodes(null)
       
       expect(nodes).toHaveLength(1)
-      expect(nodes[0].nodeType).toBe(Node.TEXT_NODE)
-      expect((nodes[0] as Text).data).toBe('')
+      expect(nodes[0]?.nodeType).toBe(Node.TEXT_NODE)
+      expect((nodes[0] as Text)?.data).toBe('')
     })
 
     it('should convert undefined to empty text node', () => {
       const nodes = childToNodes(undefined)
       
       expect(nodes).toHaveLength(1)
-      expect(nodes[0].nodeType).toBe(Node.TEXT_NODE)
-      expect((nodes[0] as Text).data).toBe('')
+      expect(nodes[0]?.nodeType).toBe(Node.TEXT_NODE)
+      expect((nodes[0] as Text)?.data).toBe('')
     })
 
     it('should convert boolean to empty text node', () => {
       const trueNodes = childToNodes(true)
       expect(trueNodes).toHaveLength(1)
-      expect(trueNodes[0].nodeType).toBe(Node.TEXT_NODE)
+      expect(trueNodes[0]?.nodeType).toBe(Node.TEXT_NODE)
       
       const falseNodes = childToNodes(false)
       expect(falseNodes).toHaveLength(1)
-      expect(falseNodes[0].nodeType).toBe(Node.TEXT_NODE)
+      expect(falseNodes[0]?.nodeType).toBe(Node.TEXT_NODE)
     })
 
     it('should pass through existing Node instances', () => {
@@ -69,7 +69,7 @@ describe('create-node', () => {
       const nodes = childToNodes(html)
       
       expect(nodes).toHaveLength(1)
-      expect(nodes[0].nodeName).toBe('STRONG')
+      expect(nodes[0]?.nodeName).toBe('STRONG')
     })
 
     it.skip('should parse complex raw HTML', () => {
@@ -78,7 +78,7 @@ describe('create-node', () => {
       const nodes = childToNodes(html)
       
       expect(nodes).toHaveLength(1)
-      expect((nodes[0] as Element).className).toBe('test')
+      expect((nodes[0] as Element)?.className).toBe('test')
     })
 
     it.skip('should handle multiple nested raw HTML', () => {
@@ -111,7 +111,7 @@ describe('create-node', () => {
     })
 
     it('should render array of children', () => {
-      const childrenArray = ['A', 'B', 'C'] as const
+      const childrenArray = ['A', 'B', 'C'] // Mutable array instead of readonly
       renderChildren(container, childrenArray)
       
       expect(container.textContent).toBe('ABC')

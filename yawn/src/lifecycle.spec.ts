@@ -21,17 +21,15 @@ describe('Lifecycle hooks', () => {
   })
 
   describe('onConnected', () => {
-    it('should call callback when element is connected to DOM', (done) => {
+    it('should call callback when element is connected to DOM', async () => {
       const element = document.createElement('div')
       const listener = vi.fn()
       
       onConnected(element, listener)
       container.appendChild(element)
       
-      setTimeout(() => {
-        expect(listener).toHaveBeenCalledTimes(1)
-        done()
-      }, 50)
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(listener).toHaveBeenCalledTimes(1)
     })
 
     it('should call callback immediately if element already connected', () => {
@@ -44,7 +42,7 @@ describe('Lifecycle hooks', () => {
       expect(listener).toHaveBeenCalledTimes(1)
     })
 
-    it('should call cleanup when disconnected', (done) => {
+    it('should call cleanup when disconnected', async () => {
       const element = document.createElement('div')
       let cleanupCalled = false
       
@@ -54,17 +52,14 @@ describe('Lifecycle hooks', () => {
       
       container.appendChild(element)
       
-      setTimeout(() => {
-        container.removeChild(element)
-        
-        setTimeout(() => {
-          expect(cleanupCalled).toBe(true)
-          done()
-        }, 50)
-      }, 50)
+      await new Promise(resolve => setTimeout(resolve, 50))
+      container.removeChild(element)
+      
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(cleanupCalled).toBe(true)
     })
 
-    it('should handle multiple listeners on same element', (done) => {
+    it('should handle multiple listeners on same element', async () => {
       const element = document.createElement('div')
       const listener1 = vi.fn()
       const listener2 = vi.fn()
@@ -74,14 +69,12 @@ describe('Lifecycle hooks', () => {
       
       container.appendChild(element)
       
-      setTimeout(() => {
-        expect(listener1).toHaveBeenCalledTimes(1)
-        expect(listener2).toHaveBeenCalledTimes(1)
-        done()
-      }, 50)
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(listener1).toHaveBeenCalledTimes(1)
+      expect(listener2).toHaveBeenCalledTimes(1)
     })
 
-    it('should call callback for each connection', (done) => {
+    it('should call callback for each connection', async () => {
       const element = document.createElement('div')
       let connectCount = 0
       
@@ -89,44 +82,37 @@ describe('Lifecycle hooks', () => {
       
       container.appendChild(element)
       
-      setTimeout(() => {
-        expect(connectCount).toBe(1)
-        
-        // Disconnect and reconnect
-        container.removeChild(element)
-        
-        setTimeout(() => {
-          container.appendChild(element)
-          
-          setTimeout(() => {
-            expect(connectCount).toBe(2)
-            done()
-          }, 50)
-        }, 50)
-      }, 50)
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(connectCount).toBe(1)
+      
+      // Disconnect and reconnect
+      container.removeChild(element)
+      
+      await new Promise(resolve => setTimeout(resolve, 50))
+      container.appendChild(element)
+      
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(connectCount).toBe(2)
     })
 
-    it('should not call callback if already connected', (done) => {
+    it('should not call callback if already connected', async () => {
       const element = document.createElement('div')
       container.appendChild(element) // Connect first
       
       const listener = vi.fn()
       onConnected(element, listener) // Register after connect
       
-      setTimeout(() => {
-        expect(listener).toHaveBeenCalledTimes(1)
-        
-        // Re-register should not fire again immediately
-        onConnected(element, listener)
-        
-        setTimeout(() => {
-          expect(listener).toHaveBeenCalledTimes(2)
-          done()
-        }, 50)
-      }, 50)
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(listener).toHaveBeenCalledTimes(1)
+      
+      // Re-register should not fire again immediately
+      onConnected(element, listener)
+      
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(listener).toHaveBeenCalledTimes(2)
     })
 
-    it('should run cleanup before next connect', (done) => {
+    it('should run cleanup before next connect', async () => {
       const element = document.createElement('div')
       const events: string[] = []
       
@@ -137,28 +123,24 @@ describe('Lifecycle hooks', () => {
       
       container.appendChild(element)
       
-      setTimeout(() => {
-        expect(events).toEqual(['connected'])
-        
-        container.removeChild(element)
-        
-        setTimeout(() => {
-          expect(events).toEqual(['connected', 'cleaned'])
-          
-          // Reconnect
-          container.appendChild(element)
-          
-          setTimeout(() => {
-            expect(events).toEqual(['connected', 'cleaned', 'connected'])
-            done()
-          }, 50)
-        }, 50)
-      }, 50)
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(events).toEqual(['connected'])
+      
+      container.removeChild(element)
+      
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(events).toEqual(['connected', 'cleaned'])
+      
+      // Reconnect
+      container.appendChild(element)
+      
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(events).toEqual(['connected', 'cleaned', 'connected'])
     })
   })
 
   describe('onConnected with nested elements', () => {
-    it('should detect disconnection of nested elements', (done) => {
+    it('should detect disconnection of nested elements', async () => {
       const parent = document.createElement('div')
       const child = document.createElement('span')
       parent.appendChild(child)
@@ -172,13 +154,11 @@ describe('Lifecycle hooks', () => {
       // Remove parent should disconnect child too
       container.removeChild(parent)
       
-      setTimeout(() => {
-        expect(childCleanupCalled).toBe(true)
-        done()
-      }, 50)
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(childCleanupCalled).toBe(true)
     })
 
-    it('should handle multiple nested levels', (done) => {
+    it('should handle multiple nested levels', async () => {
       const level3 = document.createElement('div')
       const level2 = document.createElement('div').appendChild(level3)
       const level1 = document.createElement('div').appendChild(level2)
@@ -193,19 +173,16 @@ describe('Lifecycle hooks', () => {
       
       container.appendChild(level1)
       
-      setTimeout(() => {
-        container.removeChild(level1)
-        
-        setTimeout(() => {
-          expect(cleanup1Called).toBe(true)
-          expect(cleanup2Called).toBe(true)
-          expect(cleanup3Called).toBe(true)
-          done()
-        }, 50)
-      }, 50)
+      await new Promise(resolve => setTimeout(resolve, 50))
+      container.removeChild(level1)
+      
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(cleanup1Called).toBe(true)
+      expect(cleanup2Called).toBe(true)
+      expect(cleanup3Called).toBe(true)
     })
 
-    it('should only call cleanup once per listener', (done) => {
+    it('should only call cleanup once per listener', async () => {
       const element = document.createElement('div')
       let cleanupCount = 0
       
@@ -215,31 +192,26 @@ describe('Lifecycle hooks', () => {
       
       container.appendChild(element)
       
-      setTimeout(() => {
-        // Disconnect multiple times (should only cleanup once per connect)
-        container.removeChild(element)
-        
-        setTimeout(() => {
-          expect(cleanupCount).toBe(1)
-          
-          // Reconnect and disconnect again
-          container.appendChild(element)
-          
-          setTimeout(() => {
-            container.removeChild(element)
-            
-            setTimeout(() => {
-              expect(cleanupCount).toBe(2)
-              done()
-            }, 50)
-          }, 50)
-        }, 50)
-      }, 50)
+      await new Promise(resolve => setTimeout(resolve, 50))
+      // Disconnect multiple times (should only cleanup once per connect)
+      container.removeChild(element)
+      
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(cleanupCount).toBe(1)
+      
+      // Reconnect and disconnect again
+      container.appendChild(element)
+      
+      await new Promise(resolve => setTimeout(resolve, 50))
+      container.removeChild(element)
+      
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(cleanupCount).toBe(2)
     })
   })
 
   describe('onConnected edge cases', () => {
-    it('should handle element without cleanup return', (done) => {
+    it('should handle element without cleanup return', async () => {
       const element = document.createElement('div')
       
       onConnected(element, () => {
@@ -247,18 +219,15 @@ describe('Lifecycle hooks', () => {
       })
       
       container.appendChild(element)
-      setTimeout(() => {
-        container.removeChild(element)
-        
-        // Should not crash even without cleanup
-        setTimeout(() => {
-          expect(true).toBe(true)
-          done()
-        }, 50)
-      }, 50)
+      await new Promise(resolve => setTimeout(resolve, 50))
+      container.removeChild(element)
+      
+      // Should not crash even without cleanup
+      await new Promise(resolve => setTimeout(resolve, 50))
+      expect(true).toBe(true)
     })
 
-    it('should handle rapid connect/disconnect cycles', (done) => {
+    it('should handle rapid connect/disconnect cycles', async () => {
       const element = document.createElement('div')
       const events: string[] = []
       
@@ -269,27 +238,23 @@ describe('Lifecycle hooks', () => {
       
       // Rapid cycling
       container.appendChild(element)
-      setTimeout(() => {
-        container.removeChild(element)
-        
-        setTimeout(() => {
-          container.appendChild(element)
-          
-          setTimeout(() => {
-            container.removeChild(element)
-            
-            setTimeout(() => {
-              expect(events).toEqual([
-                'connected',
-                'disconnected',
-                'connected',
-                'disconnected'
-              ])
-              done()
-            }, 50)
-          }, 50)
-        }, 50)
-      }, 50)
+      await new Promise(resolve => setTimeout(resolve, 50))
+      
+      container.removeChild(element)
+      await new Promise(resolve => setTimeout(resolve, 50))
+      
+      container.appendChild(element)
+      await new Promise(resolve => setTimeout(resolve, 50))
+      
+      container.removeChild(element)
+      await new Promise(resolve => setTimeout(resolve, 50))
+      
+      expect(events).toEqual([
+        'connected',
+        'disconnected',
+        'connected',
+        'disconnected'
+      ])
     })
 
     it('should not crash on document root elements', () => {
