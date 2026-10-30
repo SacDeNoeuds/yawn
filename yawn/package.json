@@ -4,12 +4,12 @@
   "description": "The JSX library to embrace JavaScript fatigue",
   "license": "MIT",
   "author": "SacDeNoeuds <sacdenoeuds.dev@gmail.com>",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "repository": {
     "url": "https://github.com/SacDeNoeuds/yawn"
   },
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
