@@ -9,6 +9,7 @@
     "rootDir": ".",
     "esModuleInterop": true,
     "verbatimModuleSyntax": true,
+    "noEmit": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,

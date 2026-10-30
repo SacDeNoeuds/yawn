@@ -27,6 +27,7 @@
   "scripts": {
     "prebuild": "rm -rf dist",
     "build": "rollup -c",
+    "check-ts": "tsc -P tsconfig.json",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "prepack": "npm run build"
