@@ -43,27 +43,38 @@ const renderAsyncIterableChild = (
   child: ReactiveChildren
 ) => {
   let previousNodes: Node[] = [];
-  // let previousNode: Node;
-  async function render() {
-    for await (const childOrList of child) {
-      const asList = Array.isArray(childOrList) ? childOrList : [childOrList];
-      const nodes = asList.flatMap(childToNodes);
-      const anchor = previousNodes[0];
+  let isRendering = false;
 
-      if (!anchor || anchor.parentElement !== element) element.append(...nodes);
-      else {
-        // the anchor is usually part of the list.
-        const anchorCopy = document.createTextNode("");
-        element.insertBefore(anchorCopy, anchor);
-        previousNodes.forEach((node) => element.removeChild(node));
-        nodes.forEach((node) => element.insertBefore(node, anchorCopy));
-        element.removeChild(anchorCopy);
+  async function render() {
+    // Prevent concurrent renders
+    if (isRendering) return;
+    isRendering = true;
+
+    try {
+      for await (const childOrList of child) {
+        const asList = Array.isArray(childOrList) ? childOrList : [childOrList];
+        const nodes = asList.flatMap(childToNodes);
+        const anchor = previousNodes[0];
+
+        if (!anchor || anchor.parentElement !== element) element.append(...nodes);
+        else {
+          // the anchor is usually part of the list.
+          const anchorCopy = document.createTextNode("");
+          element.insertBefore(anchorCopy, anchor);
+          previousNodes.forEach((node) => element.removeChild(node));
+          nodes.forEach((node) => element.insertBefore(node, anchorCopy));
+          element.removeChild(anchorCopy);
+        }
+        previousNodes = nodes;
+
+        if (!element.isConnected) break; // stop subscription to state
       }
-      previousNodes = nodes;
-      if (!element.isConnected) break; // stop subscription to state
+    } finally {
+      isRendering = false;
     }
   }
-  render();
+
+  // Only start rendering when element is connected
   onConnected(element, render);
 };
 
