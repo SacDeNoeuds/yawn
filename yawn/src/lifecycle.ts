@@ -1,6 +1,6 @@
 /**
  * Lifecycle hooks for Yawn components.
- * 
+ *
  * This module provides `onConnected` which fires when an element is connected to the DOM,
  * and optionally returns a cleanup function that will be called on disconnect.
  */
@@ -16,25 +16,25 @@ const listeners = new Map<Node, Set<Listener>>()
  * Fires callback when element is connected to DOM.
  * If callback returns a function, it will be called on disconnect (cleanup).
  * Callback can be async and return Promise<void> or a cleanup function.
- * 
+ *
  * @param element - The element to observe
  * @param callback - Fire on connect, optionally returns cleanup function for disconnect
  */
 export function onConnected(
   element: Node,
-  callback: () => unknown | (() => void)
+  callback: () => unknown | (() => void),
 ): void {
   const entry: Listener = { listener: callback }
-  
+
   // Register the listener
   const set = listeners.get(element) ?? new Set()
   set.add(entry)
   listeners.set(element, set)
-  
+
   // Fire immediately if already connected
   if (element.isConnected) {
     const cleanupOrPromise = callback()
-    const isFunction = typeof cleanupOrPromise === 'function'
+    const isFunction = typeof cleanupOrPromise === "function"
     if (isFunction) {
       entry.cleanup = cleanupOrPromise as () => void
     }
@@ -47,12 +47,12 @@ export function onConnected(
 function handleDisconnect(element: Node): void {
   const set = listeners.get(element)
   if (!set) return
-  
+
   // Run all cleanups in reverse order (LIFO like useEffect)
   for (const entry of set) {
     entry.cleanup?.()
   }
-  
+
   // Clean up the map
   listeners.delete(element)
 }
@@ -63,12 +63,12 @@ function handleDisconnect(element: Node): void {
 function handleConnect(element: Node): void {
   const set = listeners.get(element)
   if (!set) return
-  
+
   for (const entry of set) {
     const result = entry.listener()
-    
+
     // If it returns a function, store as cleanup
-    if (typeof result === 'function') {
+    if (typeof result === "function") {
       entry.cleanup = result as () => void
     } else {
       entry.cleanup = undefined
@@ -103,10 +103,7 @@ const observer = new MutationObserver((mutations) => {
 /**
  * Recursively collect all connected elements.
  */
-function collectConnected(
-  element: Element,
-  collection: Set<Node>
-): void {
+function collectConnected(element: Element, collection: Set<Node>): void {
   if (element.isConnected) {
     collection.add(element)
     element.childNodes.forEach((child) => {
@@ -120,10 +117,7 @@ function collectConnected(
 /**
  * Recursively collect all disconnected elements.
  */
-function collectDisconnected(
-  element: Element,
-  collection: Set<Node>
-): void {
+function collectDisconnected(element: Element, collection: Set<Node>): void {
   // If parent is not connected, this element and its children are also disconnected
   if (!element.isConnected) {
     collection.add(element)

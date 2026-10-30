@@ -1,16 +1,16 @@
-import { renderChildren } from "../create-node";
-import type { Children } from "./jsx-runtime";
-import { onConnected } from "../lifecycle";
-import { createElement } from "../create-element";
+import { renderChildren } from "../create-node"
+import type { Children } from "./jsx-runtime"
+import { onConnected } from "../lifecycle"
+import { createElement } from "../create-element"
 
 export const Fragment = (props: { children?: Children }): Node => {
   const mount = (element: HTMLElement) => {
     onConnected(element, () => {
-      const parent = element.parentElement;
-      if (!parent) return;
-      parent.removeChild(element);
-      renderChildren(parent, props.children);
-    });
-  };
-  return createElement('span')({ ref: mount })();
-};
+      const parent = element.parentElement
+      if (!parent) return
+      parent.removeChild(element)
+      renderChildren(parent, props.children)
+    })
+  }
+  return createElement("span")({ ref: mount })()
+}

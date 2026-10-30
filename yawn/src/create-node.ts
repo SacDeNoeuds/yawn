@@ -1,17 +1,17 @@
-import { absurd, isAsyncIterable, isInstanceOf } from "./utils";
-import { onConnected } from "./lifecycle";
+import { absurd, isAsyncIterable, isInstanceOf } from "./utils"
+import { onConnected } from "./lifecycle"
 
-const raw = Symbol("RawHTML");
+const raw = Symbol("RawHTML")
 type RawHtml = {
-  [raw]: string;
-};
+  [raw]: string
+}
 
-export type Children = StaticChildren | ReactiveChildren;
-type StaticChildren = Child | Child[];
-type ReactiveChildren = AsyncIterable<StaticChildren>;
-type Child = string | number | boolean | null | undefined | Node | RawHtml;
+export type Children = StaticChildren | ReactiveChildren
+type StaticChildren = Child | Child[]
+type ReactiveChildren = AsyncIterable<StaticChildren>
+type Child = string | number | boolean | null | undefined | Node | RawHtml
 
-export const rawHtml = (html: string): RawHtml => ({ [raw]: html });
+export const rawHtml = (html: string): RawHtml => ({ [raw]: html })
 
 /**
  * Here is the distingo between Children and ChildList:
@@ -26,57 +26,58 @@ export const renderChildren = (
     isAsyncIterable(child)
       ? renderAsyncIterableChild(element, child)
       : Array.isArray(child)
-      ? renderChildren(element, ...child)
-      : renderChild(element, child);
-  });
-};
+        ? renderChildren(element, ...child)
+        : renderChild(element, child)
+  })
+}
 
 const renderChild = (element: Element | DocumentFragment, child: Child) => {
-  const nodes = childToNodes(child);
+  const nodes = childToNodes(child)
   nodes.forEach((node) => {
-    if (!element.contains(node)) element.append(node);
-  });
-};
+    if (!element.contains(node)) element.append(node)
+  })
+}
 
 const renderAsyncIterableChild = (
   element: Element | DocumentFragment,
-  child: ReactiveChildren
+  child: ReactiveChildren,
 ) => {
-  let previousNodes: Node[] = [];
-  let isRendering = false;
+  let previousNodes: Node[] = []
+  let isRendering = false
 
   async function render() {
     // Prevent concurrent renders
-    if (isRendering) return;
-    isRendering = true;
+    if (isRendering) return
+    isRendering = true
 
     try {
       for await (const childOrList of child) {
-        const asList = Array.isArray(childOrList) ? childOrList : [childOrList];
-        const nodes = asList.flatMap(childToNodes);
-        const anchor = previousNodes[0];
+        const asList = Array.isArray(childOrList) ? childOrList : [childOrList]
+        const nodes = asList.flatMap(childToNodes)
+        const anchor = previousNodes[0]
 
-        if (!anchor || anchor.parentElement !== element) element.append(...nodes);
+        if (!anchor || anchor.parentElement !== element)
+          element.append(...nodes)
         else {
           // the anchor is usually part of the list.
-          const anchorCopy = document.createTextNode("");
-          element.insertBefore(anchorCopy, anchor);
-          previousNodes.forEach((node) => element.removeChild(node));
-          nodes.forEach((node) => element.insertBefore(node, anchorCopy));
-          element.removeChild(anchorCopy);
+          const anchorCopy = document.createTextNode("")
+          element.insertBefore(anchorCopy, anchor)
+          previousNodes.forEach((node) => element.removeChild(node))
+          nodes.forEach((node) => element.insertBefore(node, anchorCopy))
+          element.removeChild(anchorCopy)
         }
-        previousNodes = nodes;
+        previousNodes = nodes
 
-        if (!element.isConnected) break; // stop subscription to state
+        if (!element.isConnected) break // stop subscription to state
       }
     } finally {
-      isRendering = false;
+      isRendering = false
     }
   }
 
   // Only start rendering when element is connected
-  onConnected(element, render);
-};
+  onConnected(element, render)
+}
 
 // const renderChildList = (
 //   element: Element | DocumentFragment,
@@ -90,20 +91,19 @@ const renderAsyncIterableChild = (
 //   })
 // }
 
-const isNode = isInstanceOf(Node);
+const isNode = isInstanceOf(Node)
 export const childToNodes = (child: Child): Node[] => {
-  if (isNode(child)) return [child];
+  if (isNode(child)) return [child]
   if (child === undefined || child === null)
-    return [document.createTextNode("")];
-  if (typeof child === "boolean") return [document.createTextNode("")];
-  if (typeof child === "number")
-    return [document.createTextNode(String(child))];
-  if (typeof child === "string") return [document.createTextNode(child)];
+    return [document.createTextNode("")]
+  if (typeof child === "boolean") return [document.createTextNode("")]
+  if (typeof child === "number") return [document.createTextNode(String(child))]
+  if (typeof child === "string") return [document.createTextNode(child)]
   if (typeof child === "object" && raw in child) {
-    const node = document.createElement("div");
-    node.outerHTML = child[raw];
-    return [node];
+    const node = document.createElement("div")
+    node.outerHTML = child[raw]
+    return [node]
   }
-  console.debug('child', child)
-  absurd(child);
-};
+  console.debug("child", child)
+  absurd(child)
+}
