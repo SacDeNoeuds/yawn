@@ -14,42 +14,48 @@ const constructor = (globalThis.AsyncIterator ?? AsyncIteratorPrototype.construc
 
 export class State<T> extends constructor<T> {
   #value: T;
-  #isNextValueReady!: Promise<void>
-  #markNextValueAsReady!: () => void;
+  #currentPromise: Promise<void>;
+  #nextPromise!: Promise<void>;
+  #resolveNext!: () => void;
+
   constructor(initialValue: T) {
     super();
     this.#value = initialValue;
-    const reset = () => {
-      this.#isNextValueReady = new Promise<void>((resolve) => {
-        this.#markNextValueAsReady = () => {
-          resolve();
-          reset();
-        };
-      });
-    }
-    reset();
+    this.#currentPromise = Promise.resolve(); // immediate for first value
+    this.#setupNextPromise();
+  }
+
+  #setupNextPromise() {
+    this.#nextPromise = new Promise<void>((resolve) => {
+      this.#resolveNext = () => {
+        resolve();
+        this.#setupNextPromise();
+      };
+    });
   }
 
   async *[Symbol.asyncIterator]() {
     while (true) {
       yield this.#value;
-      await this.#isNextValueReady;
+      await this.#currentPromise;
+      this.#currentPromise = this.#nextPromise;
     }
   }
 
   async next() {
-    await this.#isNextValueReady;
+    await this.#currentPromise;
+    this.#currentPromise = this.#nextPromise;
     return { value: this.#value, done: false };
   }
 
   set(next: T) {
     this.#value = next;
-    this.#markNextValueAsReady();
+    this.#resolveNext();
   }
 
   update(fn: (previous: T) => T) {
     this.#value = fn(this.#value);
-    this.#markNextValueAsReady();
+    this.#resolveNext();
   }
 }
 
