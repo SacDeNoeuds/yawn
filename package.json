@@ -18,9 +18,15 @@
     "demo": "cd ./demo && npm ci && npm start",
     "predemo:build": "cd ./yawn && npm ci && npm run build && cd ..",
     "demo:build": "cd ./demo && npm ci && npm run build",
-    "format": "oxfmt"
+    "format": "oxfmt",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*": "npx oxfmt --no-error-on-unmatched-pattern && cd yawn && npm run check-ts && CI=1 npm run test"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "oxfmt": "^0.75.0"
   }
 }
