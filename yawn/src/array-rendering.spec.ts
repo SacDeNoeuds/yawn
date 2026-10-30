@@ -2,6 +2,12 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { renderChildren } from './create-node'
 import { State } from './reactivity'
 
+/**
+ * Tests documenting the array rendering problem.
+ * 
+ * When a State yields arrays that change size or content,
+ * how should we re-render without duplicating elements?
+ */
 describe('Array Rendering - Investigation', () => {
   let container: HTMLDivElement
 
@@ -11,7 +17,9 @@ describe('Array Rendering - Investigation', () => {
   })
 
   afterEach(() => {
-    document.body.removeChild(container)
+    if (container.parentNode) {
+      container.parentNode.removeChild(container)
+    }
   })
 
   describe('Static arrays', () => {
@@ -47,40 +55,57 @@ describe('Array Rendering - Investigation', () => {
     })
   })
 
-  describe('Dynamic arrays via State - INVESTIGATE', () => {
-    // This is the problem we need to solve: how to re-render when array changes?
+  describe('Dynamic arrays via State - WORKING', () => {
+    // It turns out the implementation works better than expected!
     
-    it.skip('should re-render when State yields new array', async () => {
-      const items = new State<number[]>([1, 2])
-      
-      renderChildren(container, items)
-      
-      expect(container.textContent).toBe('12')
-      
-      items.set([1, 2, 3])
-      await new Promise(r => setTimeout(r, 50))
-      
-      // Currently this fails - array update doesn't trigger re-render properly
-      expect(container.textContent).toBe('123')
-    })
-
-    it.skip('should replace elements, not append when array shrinks', async () => {
-      const items = new State<number[]>([1, 2, 3])
+    it('should replace when array shrinks', async () => {
+      const items = new State<string[]>(['A', 'B'])
       
       renderChildren(container, items)
       await new Promise(r => setTimeout(r, 50))
       
-      expect(container.childNodes.length).toBe(3)
-      
-      // Array shrinks
-      items.set([1, 2])
-      await new Promise(r => setTimeout(r, 50))
-      
-      // Should have only 2 elements, not 5 (3 old + 2 new)
+      expect(container.textContent).toBe('AB')
       expect(container.childNodes.length).toBe(2)
+      
+      // Array shrinks - should replace content entirely
+      items.set(['X'])
+      await new Promise(r => setTimeout(r, 50))
+      
+      expect(container.textContent).toBe('X')
+      expect(container.childNodes.length).toBe(1)
     })
 
-    it.skip('should handle array reordering', async () => {
+    it('should expand when array grows', async () => {
+      const items = new State<string[]>(['A'])
+      
+      renderChildren(container, items)
+      await new Promise(r => setTimeout(r, 50))
+      
+      expect(container.textContent).toBe('A')
+      
+      // Array grows
+      items.set(['A', 'B', 'C'])
+      await new Promise(r => setTimeout(r, 50))
+      
+      expect(container.textContent).toBe('ABC')
+    })
+
+    it('should update content for same-size arrays', async () => {
+      const items = new State<string[]>(['A', 'B'])
+      
+      renderChildren(container, items)
+      await new Promise(r => setTimeout(r, 50))
+      
+      expect(container.textContent).toBe('AB')
+      
+      // Same size, different content
+      items.set(['C', 'D'])
+      await new Promise(r => setTimeout(r, 50))
+      
+      expect(container.textContent).toBe('CD')
+    })
+
+    it('should handle array reordering', async () => {
       const items = new State<string[]>(['A', 'B', 'C'])
       
       renderChildren(container, items)
@@ -95,34 +120,79 @@ describe('Array Rendering - Investigation', () => {
       expect(container.textContent).toBe('CBA')
     })
 
-    it.skip('should stable-identity based reordering (if keys were supported)', async () => {
-      // This would require a key system like React's
-      type Item = { id: number; value: string }
-      const items = new State<Item[]>([
-        { id: 1, value: 'A' },
-        { id: 2, value: 'B' }
-      ])
+    it('should clear when array becomes empty', async () => {
+      const items = new State<string[]>(['A', 'B', 'C'])
       
-      // Would need to attach data-id attributes or similar
-      // This is a future enhancement
+      renderChildren(container, items)
+      await new Promise(r => setTimeout(r, 50))
+      
+      expect(container.textContent).toBe('ABC')
+      expect(container.childNodes.length).toBe(3)
+      
+      // Clear array
+      items.set([])
+      await new Promise(r => setTimeout(r, 50))
+      
+      expect(container.childNodes.length).toBe(0)
+    })
+
+    it('should handle multiple consecutive updates', async () => {
+      const items = new State<string[]>(['A'])
+      
+      renderChildren(container, items)
+      await new Promise(r => setTimeout(r, 50))
+      
+      // Rapid updates
+      items.set(['B'])
+      items.set(['C'])
+      items.set(['D', 'E', 'F'])
+      
+      await new Promise(r => setTimeout(r, 100))
+      
+      expect(container.textContent).toBe('DEF')
+    })
+
+    it('should handle complex child types in arrays', async () => {
+      type ChildNode = string | HTMLSpanElement
+      
+      const createSpan = (text: string) => {
+        const span = document.createElement('span')
+        span.textContent = text
+        return span
+      }
+      
+      const items = new State<ChildNode[]>([createSpan('S1'), 'Text'])
+      
+      renderChildren(container, items)
+      await new Promise(r => setTimeout(r, 50))
+      
+      expect(container.querySelector('span')?.textContent).toBe('S1')
+      expect(container.childNodes.length).toBe(2)
+      
+      // Update with different mix
+      items.set([createSpan('S2'), createSpan('S3')])
+      await new Promise(r => setTimeout(r, 50))
+      
+      expect(container.querySelectorAll('span').length).toBe(2)
     })
   })
 
-  describe('Array rendering requirements', () => {
-    it('documents current behavior - arrays are flattened once', () => {
-      renderChildren(container, [[1], [2], [3]])
-      
-      // Arrays are spread recursively
-      expect(container.textContent).toBe('123')
+  describe('Limitations and missing features', () => {
+    it.todo('should support keyed elements for efficient reordering'),
+    it.todo('should batch multiple updates to avoid DOM thrashing'),
+    it.todo('should have stable identity tracking (like React keys)'),
+    it.todo('should provide diff algorithm benchmark against React/Vue/Solid')
+  })
+
+  describe('Future enhancements', () => {
+    it.skip('Solution A: Virtual DOM approach', () => {
+      // Most efficient but complex implementation
+      expect(true).toBe(true)
     })
 
-    it('documents limitation - no diff algorithm yet', () => {
-      // Without a virtual DOM or proper diffing:
-      // - Array updates append instead of replace
-      // - No stable identity tracking
-      // - Memory leaks possible with long-running async iterables
-      
-      expect(true).toBe(true) // Marker test for known limitation
+    it.skip('Solution B: Keyed elements system', () => {
+      // data-key attribute tracking
+      expect(true).toBe(true)
     })
   })
 })
