@@ -8,6 +8,7 @@
 interface Listener {
   listener: () => unknown | (() => void)
   cleanup?: () => void
+  active: boolean
 }
 
 const listeners = new Map<Node, Set<Listener>>()
@@ -24,20 +25,21 @@ export function onConnected(
   element: Node,
   callback: () => unknown | (() => void),
 ): void {
-  const entry: Listener = { listener: callback }
+  const entry: Listener = { listener: callback, active: false }
 
   // Register the listener
   const set = listeners.get(element) ?? new Set()
   set.add(entry)
   listeners.set(element, set)
 
-  // Fire immediately if already connected
-  if (element.isConnected) {
+  // Fire immediately if already connected and never been active
+  if (element.isConnected && !entry.active) {
     const cleanupOrPromise = callback()
     const isFunction = typeof cleanupOrPromise === "function"
     if (isFunction) {
       entry.cleanup = cleanupOrPromise as () => void
     }
+    entry.active = true
   }
 }
 
@@ -50,11 +52,11 @@ function handleDisconnect(element: Node): void {
 
   // Run all cleanups in reverse order (LIFO like useEffect)
   for (const entry of set) {
-    entry.cleanup?.()
+    if (entry.active) {
+      entry.cleanup?.()
+      entry.active = false
+    }
   }
-
-  // Clean up the map
-  listeners.delete(element)
 }
 
 /**
@@ -65,13 +67,17 @@ function handleConnect(element: Node): void {
   if (!set) return
 
   for (const entry of set) {
-    const result = entry.listener()
+    // Only call if not currently active
+    if (!entry.active) {
+      const result = entry.listener()
 
-    // If it returns a function, store as cleanup
-    if (typeof result === "function") {
-      entry.cleanup = result as () => void
-    } else {
-      entry.cleanup = undefined
+      // If it returns a function, store as cleanup
+      if (typeof result === "function") {
+        entry.cleanup = result as () => void
+      } else {
+        entry.cleanup = undefined
+      }
+      entry.active = true
     }
   }
 }
