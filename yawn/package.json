@@ -29,6 +29,7 @@
     "build": "rollup -c",
     "check-ts": "tsc -P tsconfig.json",
     "test": "vitest",
+    "test:mutation": "stryker run",
     "test:coverage": "vitest --coverage",
     "prepack": "npm run build"
   },
@@ -36,6 +37,9 @@
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.0",
     "@rollup/plugin-typescript": "^12.3.0",
+    "@stryker-mutator/core": "^10.1.1",
+    "@stryker-mutator/typescript-checker": "^10.1.1",
+    "@stryker-mutator/vitest-runner": "^10.1.1",
     "@types/jsdom": "^30.0.0",
     "@vitest/coverage-v8": "^5.0.5",
     "jsdom": "^30.1.3",
