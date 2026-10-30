@@ -17,7 +17,7 @@ export function TextStreamDemo() {
         </button>
       </div>
       <div>
-        {console.debug('template', { isRendered })}
+        {console.debug("template", { isRendered })}
         {map(isRendered, (isRendered) => {
           console.debug({ isRendered })
           return isRendered ? <TextStream /> : null

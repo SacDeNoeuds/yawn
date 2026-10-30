@@ -2,15 +2,15 @@
   "name": "client-side-jsx-demo",
   "version": "1.0.0",
   "description": "Client-Side JSX Demo",
+  "keywords": [
+    "javascript",
+    "typescript"
+  ],
   "type": "module",
   "scripts": {
     "start": "vite",
     "build": "vite build"
   },
-  "keywords": [
-    "typescript",
-    "javascript"
-  ],
   "devDependencies": {
     "@sacdenoeuds/yawn": "file:../yawn",
     "@types/node": "^25.5.0",

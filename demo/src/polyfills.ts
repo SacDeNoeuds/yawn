@@ -1,8 +1,16 @@
-import 'iterator-polyfill'
+import "iterator-polyfill"
 // import configurator from 'core-js/configurator'
 
-const { getPrototypeOf: protoOf } = Object;
-const AsyncIteratorPrototype = protoOf(protoOf(protoOf(async function* () { /* empty */ }())))
+const { getPrototypeOf: protoOf } = Object
+const AsyncIteratorPrototype = protoOf(
+  protoOf(
+    protoOf(
+      (async function* () {
+        /* empty */
+      })(),
+    ),
+  ),
+)
 
 // configurator({ AsyncIteratorPrototype });
 

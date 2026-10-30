@@ -15,16 +15,17 @@ That's it.
 A read-only state is basically an `AsyncIterable`, nothing more.
 
 To take an example, this is a valid state:
+
 ```ts
 type TodoId = number
 async function* fetchTodo(todoId: TodoId) {
-  yield { status: 'pending' } as const
+  yield { status: "pending" } as const
   try {
     const response = await fetch(`…/todo/${todoId}`)
     const todo = await response.json()
-    yield { status: 'success', todo } as const
+    yield { status: "success", todo } as const
   } catch (error) {
-    yield { status: 'failure', error } as const
+    yield { status: "failure", error } as const
   }
 }
 const todo = fetchTodo(1)
@@ -50,6 +51,7 @@ State composition can be achieved by composing native `AsyncIterable` using soon
 Because reactivity is what powers client-side rendering libraries, all of them. Rendering a simple div is easy, but how do you re-render when your state changes?
 
 Any client-side rendering library _needs_ to build their own reactivity system:
+
 - React ships its `useState`
 - Vue goes with `ref` & co
 - Angular delegated it to RxJS
@@ -69,10 +71,11 @@ Which contrasts with the fact that the Web itself is never introducing breaking 
 Looking back, those frameworks trapped developers in the loop of continuously needing to learn tools that will disappear or change in the next ~5 years, here are a few critics.
 
 > [!NOTE]
-> 
+>
 > The critics I am about to share **are not a diatribe**, all these tools had to re-implement their version of everything depending on the state (🤭) of the Web Platform at the time of their creation, and their choices pushed the Ecma committee to add features to the Web, so a **big thanks is in order**.
 
 Now that the mindset is clarified, let's go back to those critics – and those are just the **tip of the iceberg**:
+
 - React went from classes to hooks, then added server-side apps, and decided to name the `input` event listener `onChange` instead of `onInput` which is the real standard listener (very few React developers actually know that, by the way). It took **years** to support custom elements. The list is really long when it comes to React.
 - Vue had the Option API and then added the Composition API to support ~hooks in disguise~ composables, introducing `@vue/reactivity` at the time. It reuses Web APIs names in non-compatible ways (hello Slot props, templates).
 - Angular moved to RxJS in v2, now moved to Signals.
@@ -86,6 +89,7 @@ I could go on for a very long while, to be honest.
 Now remember, any client-side rendering library is _coupled_ to its reactivity system. Therefore, we cannot just say "Hey, change your reactivity system and you're good to go". But what if…
 
 _What if_ we had that client-side library that tackles two problems at once?
+
 - the need to learn a new reactivity system that will get obsolete in ~5 years
 - the need to learn a new client-side rendering library that will get obsolete in ~5 years
 
@@ -134,13 +138,13 @@ You can check the implementation [here](https://github.com/SacDeNoeuds/yawn/tree
 Here’s good ol’ `Counter` example.
 
 ```tsx
-import { State } from '@sacdenoeuds/yawn'
+import { State } from "@sacdenoeuds/yawn"
 
 export function Counter() {
   const count = new State(0)
-  const decrement = () => count.update((count) => count - 1);
-  const increment = () => count.update((count) => count + 1);
-  const reset = () => count.set(0);
+  const decrement = () => count.update((count) => count - 1)
+  const increment = () => count.update((count) => count + 1)
+  const reset = () => count.set(0)
 
   return (
     <div class="counter" data-count={count}>
@@ -154,10 +158,9 @@ export function Counter() {
         +
       </button>
     </div>
-  );
+  )
 }
 ```
-
 
 ## Example of a derived state
 
@@ -168,9 +171,12 @@ type Props = { todoId: number }
 export function TodoPage({ todoId }: Props) {
   const todoState = fetchTodo(todoId)
   switch (todoState.status) {
-    case 'pending': return <div>Loading…</div>
-    case 'failure': return <div>Uh-oh, something went wrong</div>
-    case 'success': return <Todo todo={todoState.todo} />
+    case "pending":
+      return <div>Loading…</div>
+    case "failure":
+      return <div>Uh-oh, something went wrong</div>
+    case "success":
+      return <Todo todo={todoState.todo} />
   }
 }
 
@@ -178,8 +184,7 @@ function Todo({ todo }) {
   return (
     <ul>
       <li>id: {todo.id}</li>
-      <li>title: {todo.title}</li>
-      …
+      <li>title: {todo.title}</li>…
     </ul>
   )
 }
@@ -232,7 +237,7 @@ Because it is pure & standard JavaScript, the pros are massive:
 This approach looks promising but still requires exploration regarding rendering an array state for instance, or composing JSX from a Server-Sent Event state. Checking memory leaks is clearly on the radar too.
 
 Async Iterators is a difficult technology to master, it has pitfalls and traps.
-Compared to Signals, automatic dependency tracking is lost, I consider this to actually be a pro  but it still is a missing feature compared to Signals.
+Compared to Signals, automatic dependency tracking is lost, I consider this to actually be a pro but it still is a missing feature compared to Signals.
 
 Finally, yet another JSX runtime must be created to support Async Iterables as attribute values or children.
 

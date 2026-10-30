@@ -28,7 +28,7 @@ button {
 .vertical-spacer {
   display: flex;
   flex-direction: column;
-  
+
   &.gap-s {
     gap: 0.5rem;
   }

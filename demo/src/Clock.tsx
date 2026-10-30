@@ -1,4 +1,3 @@
-
 async function* makeClock(intervalInMs: number) {
   while (true) {
     yield new Date()
@@ -6,17 +5,17 @@ async function* makeClock(intervalInMs: number) {
   }
 }
 
-
 export function Clock() {
-  const time = makeClock(1_000);
-    return (
-      <div style="font-variant: tabular-nums">
-        Time: {time.map(timeFormatter.format)}
-      </div>
+  const time = makeClock(1_000)
+  return (
+    <div style="font-variant: tabular-nums">
+      Time: {time.map(timeFormatter.format)}
+    </div>
   )
 }
 
-const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
+const delay = (ms: number) =>
+  new Promise<void>((resolve) => setTimeout(resolve, ms))
 const timeFormatter = new Intl.DateTimeFormat(undefined, {
-    timeStyle: 'medium',
+  timeStyle: "medium",
 })

@@ -22,4 +22,3 @@ Everyone knows CSS, be as close to CSS as possible:
 Let's used scoped styles for components, global stylesheets for theming, etc.
 
 I think you get the drill.
-

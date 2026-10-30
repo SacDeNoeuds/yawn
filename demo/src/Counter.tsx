@@ -1,12 +1,12 @@
-import { State } from "@sacdenoeuds/yawn";
-import './counter.css';
+import { State } from "@sacdenoeuds/yawn"
+import "./counter.css"
 
 interface Props {
-  count: State<number>;
+  count: State<number>
 }
 export function Counter({ count }: Props) {
-  const decrement = () => count.update((count) => count - 1);
-  const increment = () => count.update((count) => count + 1);
+  const decrement = () => count.update((count) => count - 1)
+  const increment = () => count.update((count) => count + 1)
 
   return (
     <div class="counter" data-count={count}>
@@ -18,5 +18,5 @@ export function Counter({ count }: Props) {
         +
       </button>
     </div>
-  );
+  )
 }

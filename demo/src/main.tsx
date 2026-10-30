@@ -15,36 +15,31 @@ function App() {
     <div class="app">
       <Section
         heading="Todo fetcher"
-        linkToSourceCode="https://github.com/SacDeNoeuds/yawn/blob/main/demo/src/TodoFetcher.tsx"
-      >
+        linkToSourceCode="https://github.com/SacDeNoeuds/yawn/blob/main/demo/src/TodoFetcher.tsx">
         <TodoFetcher />
       </Section>
 
       <Section
         heading="Counter"
-        linkToSourceCode="https://github.com/SacDeNoeuds/yawn/blob/main/demo/src/Counter.tsx"
-      >
+        linkToSourceCode="https://github.com/SacDeNoeuds/yawn/blob/main/demo/src/Counter.tsx">
         <Counter count={count} />
       </Section>
 
       <Section
         heading="List"
-        linkToSourceCode="https://github.com/SacDeNoeuds/yawn/blob/main/demo/src/List.tsx"
-      >
+        linkToSourceCode="https://github.com/SacDeNoeuds/yawn/blob/main/demo/src/List.tsx">
         <List numberOfItems={count} />
       </Section>
 
       <Section
         heading="Text stream demo"
-        linkToSourceCode="https://github.com/SacDeNoeuds/yawn/blob/main/demo/src/TextStream.tsx"
-      >
+        linkToSourceCode="https://github.com/SacDeNoeuds/yawn/blob/main/demo/src/TextStream.tsx">
         <TextStreamDemo />
       </Section>
 
       <Section
         heading="Clock"
-        linkToSourceCode="https://github.com/SacDeNoeuds/yawn/blob/main/demo/src/Clock.tsx"
-      >
+        linkToSourceCode="https://github.com/SacDeNoeuds/yawn/blob/main/demo/src/Clock.tsx">
         <Clock />
       </Section>
     </div>

@@ -12,6 +12,13 @@
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "jsxImportSource": "@sacdenoeuds/yawn/jsx",
-    "lib": ["ES2024", "DOM", "DOM.Iterable", "DOM.AsyncIterable", "ES2018.AsyncIterable", "ESNext.AsyncIterable"]
+    "lib": [
+      "ES2024",
+      "DOM",
+      "DOM.Iterable",
+      "DOM.AsyncIterable",
+      "ES2018.AsyncIterable",
+      "ESNext.AsyncIterable"
+    ]
   }
 }
